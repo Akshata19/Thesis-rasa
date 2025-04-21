@@ -41,7 +41,6 @@
 #  password: password
 #  queue: queue
 action_endpoint:
-  url: "http://localhost:5055/webhook"
+  url: "https://remarkable-purpose-production.up.railway.app/webhook"
   cors:
     - "*"
-
