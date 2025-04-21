@@ -1,28 +1,24 @@
-# Use the "full" Rasa image which already bundles rasa-sdk
-FROM rasa/rasa:3.5.11-full
+# syntax=docker/dockerfile:1
+FROM python:3.10-slim
 
-# Switch to root to install any extra OS deps (if needed)
-USER root
+# 1) Install OS‑level deps if you need them:
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+  && rm -rf /var/lib/apt/lists/*
+
+# 2) Create app directory
 WORKDIR /app
 
-# Copy your entire project in
-COPY . /app
+# 3) Copy & install Python deps
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# (Optional) If you want to retrain on build, otherwise
-# you can pre-build your model locally
-RUN rasa train
+# 4) Copy code
+COPY . .
 
-# Switch back to non‑root user
-USER 1001
-
-# Expose the Rasa HTTP API port
+# 5) Expose the port (Railway will still use $PORT)
 EXPOSE 5005
-# Expose the actions server port (if you want to talk to it separately)
-EXPOSE 5055
 
-# Start both the HTTP API and the action server
-# `&` backgrounds the first process, then the second runs in foreground
-CMD rasa run --enable-api --cors "*" --debug & \
-    rasa run actions --actions actions
-
-
+# 6) Tell Docker how to start Rasa
+#    Using the exec‑form CMD ensures that the process is PID 1
+CMD ["bash","-lc","rasa run --enable-api --cors \"*\" --host 0.0.0.0 --port $PORT"]
