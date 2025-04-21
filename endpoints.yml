@@ -42,5 +42,3 @@
 #  queue: queue
 action_endpoint:
   url: "https://remarkable-purpose-production.up.railway.app/webhook"
-  cors:
-    - "*"
