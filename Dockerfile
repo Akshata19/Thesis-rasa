@@ -14,5 +14,3 @@ COPY . .
 
 # 5. Expose Rasa’s port
 EXPOSE 5005
-
-CMD ["rasa", "run", "--enable-api", "--cors", "*", "--host", "0.0.0.0", "--port", "5005"]
