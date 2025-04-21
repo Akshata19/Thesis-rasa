@@ -41,4 +41,4 @@
 #  password: password
 #  queue: queue
 action_endpoint:
-  url: "https://remarkable-purpose-production.up.railway.app/webhook"
+  url: "http://remarkable-purpose-production.up.railway.app/webhook"
